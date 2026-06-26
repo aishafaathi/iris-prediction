@@ -22,7 +22,7 @@ def predict():
 
     features = [[s1, s2, p1, p2]]
     features_scaled = scaler.transform(features)
-    prediction = model.predict(features_scaled)[0]
+    prediction = model.predict(features_sc .aled)[0]
     flower = {0: 'Setosa', 1: 'Versicolor', 2: 'Virginica'}
     result = flower[prediction]
     print("****Prediction is", prediction)
