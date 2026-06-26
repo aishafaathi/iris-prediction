@@ -1,0 +1,203 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:url("Soft White Lily Field.jpg") no-repeat center center/cover;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    position:relative;
+    overflow-x:hidden;
+}
+
+/* Dark Overlay with Blur */
+body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.45); 
+    backdrop-filter:blur(3px); 
+    z-index:-1;
+}
+
+/* Glass Container with Lift Effect */
+.container{
+    width:450px;
+    max-width:100%;
+    padding:40px;
+    background:rgba(255,255,255,.1);
+    backdrop-filter:blur(25px); 
+    border:1px solid rgba(255,255,255,.2);
+    border-radius:22px;
+    box-shadow:0 25px 50px rgba(0,0,0,.3);
+    animation:fadeIn 1s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 30px 60px rgba(0,0,0,.4);
+}
+
+/* Heading */
+.container h1{
+    text-align:center;
+    font-family:'Cormorant Garamond',serif;
+    color:#fff;
+    font-size:36px;
+    margin-bottom:35px;
+    letter-spacing:1px;
+    text-transform: uppercase;
+}
+
+/* Labels */
+label{
+    display:block;
+    color:rgba(255,255,255,.9);
+    margin-top:20px;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:500;
+    letter-spacing:0.5px;
+}
+
+/* Form Layout (Responsive Grid) */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+/* Inputs with Interactive Glow */
+input[type="text"]{
+    width:100%;
+    padding:14px;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:rgba(255,255,255,.85); 
+    font-size:15px;
+    transition:.3s ease-in-out;
+    color:#333;
+    border: 2px solid transparent;
+}
+
+input[type="text"]::placeholder {
+    color: #999;
+    font-size: 13px;
+}
+
+input[type="text"]:focus{
+    background:#fff;
+    border-color: #efb6c8;
+    box-shadow:0 0 15px rgba(239, 182, 200, 0.4);
+}
+
+/* Button with Gradient & Hover Scaling */
+input[type="submit"]{
+    width:100%;
+    margin-top:35px;
+    padding:16px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#efb6c8,#d88ca8);
+    color:white;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s ease;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+input[type="submit"]:hover{
+    transform:translateY(-2px) scale(1.01);
+    box-shadow:0 12px 30px rgba(239,182,200,.6);
+    background:linear-gradient(135deg,#f2c4d3,#df9db6);
+}
+
+input[type="submit"]:active{
+    transform:scale(.99);
+}
+
+/* Prediction Result Area */
+.result{
+    margin-top:30px;
+    padding:25px;
+    border-radius:15px;
+    text-align:center;
+    background:rgba(255,255,255,.95);
+    color:#333;
+    animation:slideUp 0.8s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    display: none; 
+}
+
+.result.show {
+    display: block;
+}
+
+.result strong{
+    color:#d66a92;
+    font-size:24px;
+    font-weight: 700;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+/* Entry Animations */
+@keyframes fadeIn{
+    from{ opacity:0; transform:translateY(20px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+@keyframes slideUp{
+    from{ opacity:0; transform:translateY(30px) scale(0.95); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* Responsive Breakpoints */
+@media(max-width:768px){
+    .container{
+        width:90%;
+        padding:30px;
+    }
+    .container h1{
+        font-size:30px;
+        margin-bottom: 25px;
+    }
+}
+
+@media(max-width:480px){
+    .container{
+        width:100%;
+        padding:25px;
+    }
+    .container h1{
+        font-size:26px;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    input[type="text"]{
+        padding:14px;
+    }
+    input[type="submit"]{
+        padding:16px;
+        font-size:16px;
+        margin-top: 25px;
+    }
+    .result strong{
+        font-size: 20px;
+    }
+}
