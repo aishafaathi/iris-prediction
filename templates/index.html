@@ -1,82 +1,103 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iris Flower Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <button id="theme-toggle" class="theme-btn">🌓 Toggle Theme</button>
+    <button type="button" id="theme-toggle" class="theme-btn">
+        🌓 Toggle Theme
+    </button>
 
     <div class="container">
-
         <h1>Iris Flower Prediction</h1>
 
-        <form id="prediction-form" action="/predict" method="post">
+        <form id="prediction-form" action="{{ url_for('predict') }}" method="post">
 
-            <label>Sepal Length</label>
-            <input type="text" name="sepal_length" placeholder="e.g. 5.1" required>
+            <label for="sepal_length">Sepal Length (cm)</label>
+            <input type="number" id="sepal_length" name="sepal_length"
+                   placeholder="e.g. 5.1" min="0" step="any" required>
 
-            <label>Sepal Width</label>
-            <input type="text" name="sepal_width" placeholder="e.g. 3.5" required>
+            <label for="sepal_width">Sepal Width (cm)</label>
+            <input type="number" id="sepal_width" name="sepal_width"
+                   placeholder="e.g. 3.5" min="0" step="any" required>
 
-            <label>Petal Length</label>
-            <input type="text" name="petal_length" placeholder="e.g. 1.4" required>
+            <label for="petal_length">Petal Length (cm)</label>
+            <input type="number" id="petal_length" name="petal_length"
+                   placeholder="e.g. 1.4" min="0" step="any" required>
 
-            <label>Petal Width</label>
-            <input type="text" name="petal_width" placeholder="e.g. 0.2" required>
+            <label for="petal_width">Petal Width (cm)</label>
+            <input type="number" id="petal_width" name="petal_width"
+                   placeholder="e.g. 0.2" min="0" step="any" required>
 
             <div id="submit-container" class="submit-wrapper">
                 <input type="submit" id="submit-btn" value="Predict">
             </div>
-
         </form>
 
-        {% if prediction is defined %}
-        <div class="result">
+        {% if prediction is defined and prediction %}
+        <div class="result" role="status">
             <strong>Prediction:</strong> {{ prediction }}
         </div>
         {% endif %}
 
+        {% if error is defined and error %}
+        <div class="error" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
     </div>
 
     <script>
-        // --- 1. Theme Switcher Logic ---
+        // Theme switcher
         const toggleBtn = document.getElementById('theme-toggle');
         const currentTheme = localStorage.getItem('theme') || 'light';
+
         document.documentElement.setAttribute('data-theme', currentTheme);
 
         toggleBtn.addEventListener('click', () => {
-            let theme = document.documentElement.getAttribute('data-theme');
-            let newTheme = theme === 'dark' ? 'light' : 'dark';
+            const theme =
+                document.documentElement.getAttribute('data-theme');
+
+            const newTheme = theme === 'dark' ? 'light' : 'dark';
+
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
         });
 
-        // --- 2. Loading Spinner Logic ---
+        // Loading state
         const form = document.getElementById('prediction-form');
-        const submitContainer = document.getElementById('submit-container');
+        const submitContainer =
+            document.getElementById('submit-container');
         const submitBtn = document.getElementById('submit-btn');
 
         form.addEventListener('submit', () => {
+            if (!form.checkValidity()) return;
+
             submitContainer.classList.add('loading');
             submitBtn.classList.add('btn-loading');
+            submitBtn.value = 'Predicting...';
+            submitBtn.disabled = true;
         });
 
-        // --- 3. Interactive Mouse-Parallax Logic ---
-        // We wrap it in a media check so it only triggers on desktop (not mobile touch screens)
-        if (window.innerWidth > 768) {
-            document.addEventListener('mousemove', (e) => {
-                // Calculate how far the mouse is from the center of the viewport
-                const moveX = (e.clientX - window.innerWidth / 2) * 0.015;
-                const moveY = (e.clientY - window.innerHeight / 2) * 0.015;
-                
-                // Shift the background position relative to the 50% 50% center anchor
-                document.body.style.backgroundPosition = `${50 + moveX}% ${50 + moveY}%`;
+        // Mouse parallax effect on desktop
+        if (window.matchMedia('(min-width: 769px)').matches) {
+            document.addEventListener('mousemove', (event) => {
+                const moveX =
+                    (event.clientX - window.innerWidth / 2) * 0.015;
+                const moveY =
+                    (event.clientY - window.innerHeight / 2) * 0.015;
+
+                document.body.style.backgroundPosition =
+                    `${50 + moveX}% ${50 + moveY}%`;
             });
         }
     </script>
+
 </body>
 </html>
