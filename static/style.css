@@ -3,7 +3,7 @@
 
 /* --- Theme Variables --- */
 :root {
-    --body-bg: url("/static/flower-bg.jpg");
+    --body-bg: url("/flower-bg.jpg");
     --overlay-color: rgba(0, 0, 0, 0.35);
     --glass-bg: rgba(255, 255, 255, 0.18);
     --glass-border: rgba(255, 255, 255, 0.35);
@@ -15,7 +15,7 @@
 }
 
 [data-theme="dark"] {
-   --body-bg: url("/static/flower-bg.jpg");
+   --body-bg: url("/flower-bg.jpg");
     --overlay-color: rgba(0, 0, 0, 0.75);
     --glass-bg: rgba(25, 25, 25, 0.55);
     --glass-border: rgba(255, 255, 255, 0.15);
