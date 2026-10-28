@@ -17,31 +17,66 @@
     <div class="container">
         <h1>Iris Flower Prediction</h1>
 
-        <form id="prediction-form" action="{{ url_for('predict') }}" method="post">
+        <p class="page-description">
+            Discover the species of an Iris flower using machine learning.
+        </p>
+
+        <!-- Link to the model comparison page -->
+        <div class="navigation-actions">
+            <a href="{{ url_for('comparison') }}" class="comparison-link">
+                📊 Compare Models
+            </a>
+        </div>
+
+        <form id="prediction-form"
+              action="{{ url_for('predict') }}"
+              method="post">
 
             <label for="sepal_length">Sepal Length (cm)</label>
-            <input type="number" id="sepal_length" name="sepal_length"
-                   placeholder="e.g. 5.1" min="0" step="any" required>
+            <input type="number"
+                   id="sepal_length"
+                   name="sepal_length"
+                   placeholder="e.g. 5.1"
+                   min="0"
+                   step="any"
+                   required>
 
             <label for="sepal_width">Sepal Width (cm)</label>
-            <input type="number" id="sepal_width" name="sepal_width"
-                   placeholder="e.g. 3.5" min="0" step="any" required>
+            <input type="number"
+                   id="sepal_width"
+                   name="sepal_width"
+                   placeholder="e.g. 3.5"
+                   min="0"
+                   step="any"
+                   required>
 
             <label for="petal_length">Petal Length (cm)</label>
-            <input type="number" id="petal_length" name="petal_length"
-                   placeholder="e.g. 1.4" min="0" step="any" required>
+            <input type="number"
+                   id="petal_length"
+                   name="petal_length"
+                   placeholder="e.g. 1.4"
+                   min="0"
+                   step="any"
+                   required>
 
             <label for="petal_width">Petal Width (cm)</label>
-            <input type="number" id="petal_width" name="petal_width"
-                   placeholder="e.g. 0.2" min="0" step="any" required>
+            <input type="number"
+                   id="petal_width"
+                   name="petal_width"
+                   placeholder="e.g. 0.2"
+                   min="0"
+                   step="any"
+                   required>
 
             <div id="submit-container" class="submit-wrapper">
-                <input type="submit" id="submit-btn" value="Predict">
+                <input type="submit"
+                       id="submit-btn"
+                       value="Predict">
             </div>
         </form>
 
         {% if prediction is defined and prediction %}
-        <div class="result" role="status">
+        <div class="result" role="status" aria-live="polite">
             <strong>Prediction:</strong> {{ prediction }}
         </div>
         {% endif %}

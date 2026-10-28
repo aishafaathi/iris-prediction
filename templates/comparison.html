@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Comparison | Iris Prediction</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .comparison-container {
+            width: 100%;
+            max-width: 1050px;
+            margin: 55px auto 20px;
+        }
+
+        .comparison-container h1 {
+            margin-bottom: 10px;
+        }
+
+        .page-description {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .comparison-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .comparison-link {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(135deg, #efb6c8, #d88ca8);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .comparison-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border-radius: 12px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: var(--text-color);
+            font-size: 13px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .comparison-table th {
+            background: rgba(216, 140, 168, 0.35);
+            font-weight: 600;
+        }
+
+        .comparison-table td:first-child,
+        .comparison-table th:first-child {
+            text-align: left;
+        }
+
+        .best-model {
+            background: rgba(216, 140, 168, 0.18);
+            font-weight: 600;
+        }
+
+        .chart-card {
+            margin-top: 24px;
+            padding: 18px;
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            background: var(--glass-bg);
+        }
+
+        .chart-card h2 {
+            color: var(--text-color);
+            font-size: 20px;
+            margin-bottom: 14px;
+        }
+
+        .chart-image {
+            display: block;
+            width: 100%;
+            max-width: 760px;
+            height: auto;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        .notice {
+            color: var(--text-color);
+            line-height: 1.7;
+            margin-top: 16px;
+            font-size: 13px;
+        }
+
+        .page-footer {
+            text-align: center;
+            color: var(--text-color);
+            font-size: 12px;
+            margin-top: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .comparison-container {
+                padding: 25px 18px;
+            }
+
+            .comparison-table {
+                font-size: 11px;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 9px 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="theme-btn" id="themeToggle" type="button">
+        Toggle Theme
+    </button>
+
+    <main class="container comparison-container">
+        <h1>Iris Model Analysis</h1>
+
+        <p class="page-description">
+            Comparing four machine learning algorithms for Iris species prediction.
+        </p>
+
+        <div class="comparison-actions">
+            <a class="comparison-link" href="{{ url_for('home') }}">
+                ← Back to Prediction
+            </a>
+        </div>
+
+        {% if results %}
+        <div class="table-wrapper">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>CV Accuracy</th>
+                        <th>Test Accuracy</th>
+                        <th>Macro Precision</th>
+                        <th>Macro Recall</th>
+                        <th>Macro F1</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in results %}
+                    <tr class="{% if loop.first %}best-model{% endif %}">
+                        <td>
+                            {{ row["Model"] }}
+                            {% if loop.first %} ★{% endif %}
+                        </td>
+                        <td>{{ "%.2f"|format(row["CV Accuracy"]|float * 100) }}%</td>
+                        <td>{{ "%.2f"|format(row["Test Accuracy"]|float * 100) }}%</td>
+                        <td>{{ "%.2f"|format(row["Precision (Macro)"]|float * 100) }}%</td>
+                        <td>{{ "%.2f"|format(row["Recall (Macro)"]|float * 100) }}%</td>
+                        <td>{{ "%.2f"|format(row["F1-score (Macro)"]|float * 100) }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <p class="notice">
+            The models are ranked by five-fold cross-validation accuracy.
+            The star marks the model selected by the training script.
+            Test metrics are calculated on the held-out test set.
+        </p>
+        {% else %}
+        <p class="notice">
+            No comparison results were found. Run
+            <code>python model.py</code> first, then refresh this page.
+        </p>
+        {% endif %}
+
+        {% if chart_exists %}
+        <section class="chart-card">
+            <h2>Model Performance Comparison</h2>
+            <img class="chart-image"
+                 src="{{ url_for('result_file', filename='model_comparison.png') }}"
+                 alt="Bar chart comparing cross-validation and test accuracy">
+        </section>
+        {% endif %}
+
+        {% if matrix_exists %}
+        <section class="chart-card">
+            <h2>Best Model Confusion Matrix</h2>
+            <img class="chart-image"
+                 src="{{ url_for('result_file', filename='confusion_matrix.png') }}"
+                 alt="Confusion matrix for the selected Iris classifier">
+        </section>
+        {% endif %}
+
+        <p class="page-footer">
+            Iris Flower Species Prediction · KTU Machine Learning Theory Project
+        </p>
+    </main>
+
+    <script>
+        const themeToggle = document.getElementById("themeToggle");
+
+        if (localStorage.getItem("theme") === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+        }
+
+        themeToggle.addEventListener("click", () => {
+            const isDark =
+                document.documentElement.getAttribute("data-theme") === "dark";
+
+            if (isDark) {
+                document.documentElement.removeAttribute("data-theme");
+                localStorage.setItem("theme", "light");
+            } else {
+                document.documentElement.setAttribute("data-theme", "dark");
+                localStorage.setItem("theme", "dark");
+            }
+        });
+    </script>
+</body>
+</html>
